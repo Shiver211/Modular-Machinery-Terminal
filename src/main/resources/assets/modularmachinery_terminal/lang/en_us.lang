@@ -1,4 +1,5 @@
 item.modularmachinery_terminal.terminal.name=Modular Machinery Terminal
+
 gui.modular_machinery_terminal.title=Modular Machinery Terminal
 gui.modular_machinery_terminal.search=Search
 gui.modular_machinery_terminal.sort=Sort
@@ -41,3 +42,11 @@ gui.modular_machinery_terminal.action_o=Open output bus GUIs
 gui.modular_machinery_terminal.action_s=Open ME pattern providers
 gui.modular_machinery_terminal.action_u=Open upgrade buses
 gui.modular_machinery_terminal.component_page=%s/%s
+
+modular_machinery_terminal.machine_prefix=[MMT] %s | Dim %s @
+modular_machinery_terminal.teleport_hover=Click to suggest: %s
+modular_machinery_terminal.machine_status= | %s | %s
+modular_machinery_terminal.formed=Formed
+modular_machinery_terminal.unformed=Unformed
+modular_machinery_terminal.running=Running
+modular_machinery_terminal.not_running=Not running
