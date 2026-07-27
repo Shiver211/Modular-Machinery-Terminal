@@ -24,6 +24,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -123,7 +124,7 @@ public class PacketOpenMachineComponentGui implements IMessage {
             if (message.key == null) {
                 return;
             }
-            WorldServer world = player.server.getWorld(message.key.dimension);
+            WorldServer world = DimensionManager.getWorld(message.key.dimension);
             if (world == null) {
                 return;
             }

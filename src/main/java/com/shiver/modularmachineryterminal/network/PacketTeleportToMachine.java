@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -86,6 +87,10 @@ public class PacketTeleportToMachine implements IMessage {
             }
             String stage = TerminalConfig.teleportRequiredGameStage;
             if (stage != null && !stage.isEmpty() && !GameStagesCompat.hasStage(player, stage)) {
+                return;
+            }
+            if (!DimensionManager.isDimensionRegistered(key.dimension)) {
+                player.sendMessage(new TextComponentTranslation("message.modular_machinery_terminal.dimension_not_found", key.dimension));
                 return;
             }
             WorldServer world = server.getWorld(key.dimension);

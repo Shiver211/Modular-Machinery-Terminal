@@ -41,6 +41,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
@@ -375,7 +376,7 @@ public class MachineCache {
      * @return 条件成立时返回 true，否则返回 false
      */
     private static boolean isCachedPositionLoaded(MinecraftServer server, MachineKey key) {
-        WorldServer world = server.getWorld(key.dimension);
+        WorldServer world = getLoadedWorld(server, key);
         if (world == null) {
             return false;
         }
@@ -393,8 +394,9 @@ public class MachineCache {
         if (server == null || key == null) {
             return;
         }
-        WorldServer world = server.getWorld(key.dimension);
+        WorldServer world = getLoadedWorld(server, key);
         if (world == null) {
+            markUnloaded(CACHE.get(key));
             return;
         }
         if (!isCachedPositionLoaded(server, key)) {
@@ -410,6 +412,19 @@ public class MachineCache {
         } else {
             removeMachine(key);
         }
+    }
+
+    /**
+     * 返回已加载的目标世界，不触发维度热加载。
+     * @param server 当前服务器实例
+     * @param key 目标机器键
+     * @return 已加载的目标世界；不存在或尚未加载时返回 null
+     */
+    private static WorldServer getLoadedWorld(MinecraftServer server, MachineKey key) {
+        if (server == null || key == null) {
+            return null;
+        }
+        return DimensionManager.getWorld(key.dimension);
     }
 
     /**

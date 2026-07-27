@@ -12,6 +12,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -69,7 +70,7 @@ public class RemoteContainerTracker {
         if (player == null || machineKey == null || targetPos == null || player.openContainer == player.inventoryContainer) {
             return;
         }
-        WorldServer world = player.server.getWorld(machineKey.dimension);
+        WorldServer world = DimensionManager.getWorld(machineKey.dimension);
         if (world == null) {
             return;
         }
@@ -230,7 +231,7 @@ public class RemoteContainerTracker {
          * @return 条件成立时返回 true，否则返回 false
          */
         private boolean isValid(EntityPlayerMP player) {
-            WorldServer world = player.server.getWorld(machineKey.dimension);
+            WorldServer world = DimensionManager.getWorld(machineKey.dimension);
             if (world == null) {
                 return false;
             }
@@ -293,7 +294,7 @@ public class RemoteContainerTracker {
             if (player.dimension != clientDimension) {
                 return;
             }
-            WorldServer world = player.server.getWorld(clientDimension);
+            WorldServer world = player.getServerWorld();
             if (world == null) {
                 return;
             }
