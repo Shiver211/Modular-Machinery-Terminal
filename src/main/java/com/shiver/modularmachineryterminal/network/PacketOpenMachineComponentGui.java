@@ -235,6 +235,16 @@ public class PacketOpenMachineComponentGui implements IMessage {
                     addTarget(targets, tile, group);
                 }
             }
+            if (group == ComponentGuiGroup.PATTERN && controller.getFoundComponents() != null) {
+                for (Map<TileEntity, ProcessingComponent<?>> found : controller.getFoundComponents().values()) {
+                    if (found == null) {
+                        continue;
+                    }
+                    for (TileEntity tile : found.keySet()) {
+                        addTarget(targets, tile, group);
+                    }
+                }
+            }
             if (group == ComponentGuiGroup.UPGRADE && controller.getFoundUpgradeBuses() != null) {
                 for (TileUpgradeBus.UpgradeBusProvider provider : controller.getFoundUpgradeBuses()) {
                     addTarget(targets, upgradeBusTile(provider), group);
