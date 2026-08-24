@@ -582,7 +582,7 @@ public class MachineCache {
         info.loaded = loaded;
         info.formed = loaded && controller.isStructureFormed();
         info.running = loaded && controller.isWorking();
-        info.status = statusText(controller.getControllerStatus());
+        info.status = statusText(controller, info.running);
 
         RecipeThread[] recipeThreads = controller.getRecipeThreadList();
         info.maxThreads = maxThreads(controller, recipeThreads);
@@ -771,6 +771,24 @@ public class MachineCache {
             }
         }
         return new ItemStack(item, 1, meta);
+    }
+
+    /**
+     * 解析机器当前应显示的状态。
+     *
+     * <p>工厂控制器的控制器级状态可能保留空闲线程上一次的配方搜索失败原因，
+     * 但其它线程已经开始工作。此时以整机运行状态为准，避免终端显示过期原因。</p>
+     *
+     * @param controller 目标机器控制器
+     * @param working 机器当前是否正在运行
+     * @return 对应的文本
+     */
+    private static String statusText(TileMultiblockMachineController controller, boolean working) {
+        CraftingStatus status = controller == null ? null : controller.getControllerStatus();
+        if (working && (status == null || !status.isCrafting())) {
+            status = CraftingStatus.working();
+        }
+        return statusText(status);
     }
 
     /**
