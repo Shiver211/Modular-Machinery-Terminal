@@ -46,10 +46,10 @@ import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -942,31 +942,15 @@ public class MachineCache {
     }
 
     /**
-     * 通过反射解析气体堆的显示名称。
+     * 通过独立兼容层读取气体堆的显示名称，避免反射加载客户端材质类型。
      * @param gasStack 气体堆对象
      * @return 对应的文本
      */
     private static String gasName(Object gasStack) {
-        if (gasStack == null) {
+        if (gasStack == null || !Loader.isModLoaded("mekanism")) {
             return "";
         }
-        try {
-            Method getGas = gasStack.getClass().getMethod("getGas");
-            Object gas = getGas.invoke(gasStack);
-            if (gas != null) {
-                Method localizedName = gas.getClass().getMethod("getLocalizedName");
-                Object name = localizedName.invoke(gas);
-                return String.valueOf(name);
-            }
-        } catch (Exception ignored) {
-        }
-        try {
-            Field gasField = gasStack.getClass().getField("gas");
-            Object gas = gasField.get(gasStack);
-            return String.valueOf(gas);
-        } catch (Exception ignored) {
-        }
-        return gasStack.toString();
+        return MekanismGasCompat.getName(gasStack);
     }
 
     private static class CachedMachine {
