@@ -16,7 +16,8 @@ final class MekanismGasCompat {
             return "";
         }
         Gas gas = ((GasStack) gasStack).getGas();
-        // 不使用 Class.getMethod：解析 Gas 的方法签名可能加载仅客户端存在的 TextureMap。
-        return gas == null ? "" : String.valueOf(gas.getLocalizedName());
+        // getLocalizedName() has a client-only return type in some Mekanism builds.
+        // getName() is server-safe and still identifies the gas for the terminal.
+        return gas == null ? "" : gas.getName();
     }
 }
